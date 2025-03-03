@@ -12,18 +12,17 @@ import (
 type Date civil.Date
 
 func (d *Date) ScanDate(v pgtype.Date) error {
+	if !v.Valid {
+		*d = Date(civil.Date{})
+		return nil
+	}
+
 	*d = Date(civil.DateOf(v.Time))
 	return nil
 }
 
 func (d Date) DateValue() (pgtype.Date, error) {
 	dd := civil.Date(d)
-	if !dd.IsValid() {
-		return pgtype.Date{
-			Time:  time.Time{},
-			Valid: dd.IsValid(),
-		}, nil
-	}
 	return pgtype.Date{
 		Time:  dd.In(time.UTC),
 		Valid: dd.IsValid(),

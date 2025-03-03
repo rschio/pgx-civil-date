@@ -3,7 +3,6 @@ package date_test
 import (
 	"context"
 	"testing"
-	"time"
 
 	"cloud.google.com/go/civil"
 	"github.com/jackc/pgx/v5"
@@ -96,7 +95,17 @@ func TestDateRoundTrip(t *testing.T) {
 		{
 			Param:  civil.Date{},
 			Result: new(civil.Date),
-			Test:   isExpectedEq(civil.DateOf(time.Time{})),
+			Test:   isExpectedEq(civil.Date{}),
+		},
+		{
+			Param:  civil.Date{Year: 1, Month: 1, Day: 1},
+			Result: new(civil.Date),
+			Test:   isExpectedEq(civil.Date{Year: 1, Month: 1, Day: 1}),
+		},
+		{
+			Param:  civil.Date{Year: 0, Month: 1, Day: 1},
+			Result: new(civil.Date),
+			Test:   isExpectedEq(civil.Date{Year: 0, Month: 1, Day: 1}),
 		},
 	})
 }
